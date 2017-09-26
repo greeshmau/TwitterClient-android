@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.gumapathi.codepath.twitteroauthclient.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,22 +7,21 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.oauth.OAuthLoginActionBarActivity;
-
-import java.sql.Time;
+import com.gumapathi.codepath.twitteroauthclient.TwitterClient;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
+		setContentView(com.gumapathi.codepath.twitteroauthclient.R.layout.activity_login);
 	}
 
 
 	// Inflate the menu; this adds items to the action bar if it is present.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.login, menu);
+		getMenuInflater().inflate(com.gumapathi.codepath.twitteroauthclient.R.menu.login, menu);
 		return true;
 	}
 
