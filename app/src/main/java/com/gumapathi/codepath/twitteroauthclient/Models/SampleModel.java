@@ -1,6 +1,6 @@
 package com.gumapathi.codepath.twitteroauthclient.Models;
 
-import com.gumapathi.codepath.twitteroauthclient.MyDatabase;
+import com.gumapathi.codepath.twitteroauthclient.Database.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;

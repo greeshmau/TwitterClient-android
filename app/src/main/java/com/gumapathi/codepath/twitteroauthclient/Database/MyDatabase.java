@@ -1,4 +1,4 @@
-package com.gumapathi.codepath.twitteroauthclient;
+package com.gumapathi.codepath.twitteroauthclient.Database;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 
