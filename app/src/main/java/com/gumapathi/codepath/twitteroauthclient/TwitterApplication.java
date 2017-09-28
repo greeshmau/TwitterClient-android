@@ -1,5 +1,6 @@
 package com.gumapathi.codepath.twitteroauthclient;
 
+import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -25,6 +26,7 @@ public class TwitterApplication extends Application {
 
 		FlowManager.init(new FlowConfig.Builder(this).build());
 		FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);
+		Stetho.initializeWithDefaults(this);
 
 		TwitterApplication.context = this;
 	}

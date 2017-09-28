@@ -1,17 +1,65 @@
 package com.gumapathi.codepath.twitteroauthclient.Models;
 
+import com.gumapathi.codepath.twitteroauthclient.Database.TweetDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by gumapathi on 9/26/2017.
  */
-
-public class Tweet {
-    public String body;
+@Table(database = TweetDatabase.class)
+public class Tweet extends BaseModel{
+    @Column
+    @PrimaryKey
     public long uid;
+
+    @Column
+    public String body;
+
+    @Column
+    @ForeignKey(saveForeignKeyModel = false)
     public User user;
+
+    @Column
     public String createdAt;
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public static Tweet fromJSON(JSONObject json) throws JSONException {
         Tweet tweet = new Tweet();
@@ -21,6 +69,7 @@ public class Tweet {
         tweet.createdAt = json.getString("created_at");
         tweet.user = User.fromJSON(json.getJSONObject("user"));
 
+        tweet.save();
         return tweet;
     }
 }

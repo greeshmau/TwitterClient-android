@@ -1,6 +1,6 @@
 package com.gumapathi.codepath.twitteroauthclient.Models;
 
-import com.gumapathi.codepath.twitteroauthclient.Database.MyDatabase;
+import com.gumapathi.codepath.twitteroauthclient.Database.TweetDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -20,7 +20,7 @@ import java.util.List;
  * Note: All models **must extend from** `BaseModel` as shown below.
  * 
  */
-@Table(database = MyDatabase.class)
+@Table(database = TweetDatabase.class)
 public class SampleModel extends BaseModel {
 
 	@PrimaryKey
