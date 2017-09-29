@@ -52,15 +52,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public void onBindViewHolder(TweetViewHolder viewHolder, int position) {
         Tweet thisTweet = allTweets.get(position);
 
-        viewHolder.tvUsername.setText(thisTweet.user.name);
-        viewHolder.tvBody.setText(thisTweet.body);
+        viewHolder.tvUsername.setText(thisTweet.getUser().getName());
+        viewHolder.tvBody.setText(thisTweet.getBody());
         try {
 
             DateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             DateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.ENGLISH);
             inputFormat.setLenient(true);
 
-            Date twDate = inputFormat.parse(thisTweet.createdAt);
+            Date twDate = inputFormat.parse(thisTweet.getCreatedAt());
             String outputText = outputFormat.format(twDate);
 
             Date newDate = new Date();
@@ -74,7 +74,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         ImageView ivProfileImage = viewHolder.ivProfileImage;
 
         Glide.with(ivProfileImage.getContext())
-                .load(thisTweet.user.profileImageURL)
+                .load(thisTweet.getUser().getProfileImageURL())
                 .into(ivProfileImage);
 
     }

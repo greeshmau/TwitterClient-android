@@ -3,6 +3,7 @@ package com.gumapathi.codepath.twitteroauthclient.Activities;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -43,6 +44,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -60,6 +62,7 @@ public class TimelineActivity extends AppCompatActivity {
     boolean startOfOldTweets = false;
     boolean endOfOldTweets = false;
     private TextView toolbar_title;
+    int ACTION_COMPOSE_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,17 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
         populateTimeline(0);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == ACTION_COMPOSE_CODE) {
+            Tweet postedTweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("PostedTweet"));
+            tweets.add(0,postedTweet);
+            tweetAdapter.notifyDataSetChanged();
+            Log.i("SAMY", "added to adapter");
+            rvTweets.scrollToPosition(0);
+        }
     }
 
     private void populateTimeline(int page) {
@@ -182,7 +196,11 @@ public class TimelineActivity extends AppCompatActivity {
 
         if (id == R.id.action_compose) {
             Toast.makeText(this, "Compose clicked", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, PostTweetActivity.class);
+            startActivityForResult(intent, ACTION_COMPOSE_CODE);
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

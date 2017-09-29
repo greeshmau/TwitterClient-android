@@ -8,24 +8,29 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by gumapathi on 9/26/2017.
  */
 @Table(database = TweetDatabase.class)
+@Parcel(analyze={User.class})
 public class User extends BaseModel{
     @Column
     @PrimaryKey
-    public long uid;
+    long uid;
 
     @Column
-    public String name;
+    String name;
 
     @Column
-    public String screenName;
+    String screenName;
 
     @Column
-    public String profileImageURL;
+    String profileImageURL;
+
+    public User() {
+    }
 
     public String getName() {
         return name;
