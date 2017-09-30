@@ -8,5 +8,6 @@
     <string name="compose_label">Compose Tweet</string>
     <string name="label_postTweet">Tweet</string>
     <string name="typeHereLabel">type here to tweet...</string>
+    <string name="maxChars">140</string>
 
 </resources>

@@ -30,7 +30,9 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:lines="4"
         android:maxLines="4"
-        tools:text="Lomo cold-pressed vice biodiesel coloring book, skateboard readymade woke literally blue bottle. Lyft marfa godard, dreamcatcher you probably haven't heard of them helvetica try-hard distillery twee franzen. Enamel pin adaptogen tofu quinoa live-edge hella. Unicorn shaman fashion axe, banjo brooklyn polaroid neutra direct trade lumbersexual cray fanny pack hashtag migas schlitz." />
+        android:autoLink="all"
+        android:linksClickable="true"
+        tools:text="Lomo cold-pressed http://www.google.com vice biodiesel coloring book, skateboard readymade woke literally blue bottle. Lyft marfa godard, dreamcatcher you probably haven't heard of them helvetica try-hard distillery twee franzen. Enamel pin adaptogen tofu quinoa live-edge hella. Unicorn shaman fashion axe, banjo brooklyn polaroid neutra direct trade lumbersexual cray fanny pack hashtag migas schlitz." />
 
     <TextView
         android:id="@+id/tvTime"
