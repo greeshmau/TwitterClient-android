@@ -2,7 +2,7 @@
 
 **Twitter Client 1.0** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://developer.twitter.com/en/docs/api-reference-index).
 
-Time spent: **20** hours spent in total
+Time spent: **25** hours spent in total
 
 ## User Stories
 
@@ -47,11 +47,13 @@ The following **additional** features are implemented:
 
 * [ ] List anything else that you can get done to improve the app functionality!
      * [X] Added custom font Roboto 
+     * [X] User can favorite a tweet (App will send a fav POST request)
+     * [X] Added Splash screen before the main screen loads
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='./twitterDemo1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

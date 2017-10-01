@@ -143,6 +143,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         long storedSinceID = 1;
         long storedMaxId = 0;
         boolean isOnline = checkForInternet();
+        if(!isOnline) {
+            Toast.makeText(this,"App is offline, showing stored tweets",Toast.LENGTH_LONG).show();
+        }
         noNewTweets = true;
         try {
             storedSinceID = SQLite.select(Tweet_Table.uid).from(Tweet.class).orderBy(Tweet_Table.createdAt, false).limit(1).querySingle().getUid();
@@ -226,7 +229,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             tweetAdapter.notifyDataSetChanged();
             endOfOldTweets = true;
         }
-        if(endOfOldTweets){
+        if(endOfOldTweets && isOnline ){
             client.getHomeTimeline(0, storedMaxId,new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -249,21 +252,18 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     Log.i("SAMY-", responseString);
-                    startOfOldTweets = true;
                     throwable.printStackTrace();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                     Log.i("SAMY-", errorResponse.toString());
-                    startOfOldTweets = true;
                     throwable.printStackTrace();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     Log.i("SAMY-", errorResponse.toString());
-                    startOfOldTweets = true;
                     throwable.printStackTrace();
                 }
             });
