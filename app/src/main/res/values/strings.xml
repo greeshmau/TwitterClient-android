@@ -10,5 +10,6 @@
     <string name="typeHereLabel">What\'s happening?</string>
     <string name="maxChars">140</string>
     <string name="profilepic_label">Profile Picture</string>
+    <string name="screenname">Screenname</string>
 
 </resources>

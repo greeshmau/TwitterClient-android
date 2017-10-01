@@ -19,7 +19,6 @@ import com.gumapathi.codepath.twitteroauthclient.Fragments.ComposeTweetDialogFra
 import com.gumapathi.codepath.twitteroauthclient.Helpers.EndlessRecyclerViewScrollListener;
 import com.gumapathi.codepath.twitteroauthclient.Models.Tweet;
 import com.gumapathi.codepath.twitteroauthclient.Models.Tweet_Table;
-import com.gumapathi.codepath.twitteroauthclient.Models.User;
 import com.gumapathi.codepath.twitteroauthclient.R;
 import com.gumapathi.codepath.twitteroauthclient.TwitterApplication;
 import com.gumapathi.codepath.twitteroauthclient.TwitterClient;
@@ -54,6 +53,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     private TwitterClient client;
     private TextView toolbar_title;
     private SwipeRefreshLayout swipeContainer;
+    boolean noNewTweets = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +142,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         Log.i("SAMY-", "poptime");
         long storedSinceID = 1;
         long storedMaxId = 0;
-        int temp = 0;
         boolean isOnline = checkForInternet();
+        noNewTweets = true;
         try {
             storedSinceID = SQLite.select(Tweet_Table.uid).from(Tweet.class).orderBy(Tweet_Table.createdAt, false).limit(1).querySingle().getUid();
             storedMaxId = SQLite.select(Tweet_Table.uid).from(Tweet.class).orderBy(Tweet_Table.createdAt, true).limit(1).querySingle().getUid();
@@ -166,8 +167,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     Log.i("SAMY-refreshing", String.valueOf(refreshing));
                     if (page == 0 && !cleared && !refreshing) {
-                        SQLite.delete(Tweet.class).async().execute();
-                        SQLite.delete(User.class).async().execute();
+                        //SQLite.delete(Tweet.class).async().execute();
+                        //SQLite.delete(User.class).async().execute();
                         cleared = true;
                         tweets.clear();
                         tweetAdapter.notifyDataSetChanged();
@@ -175,14 +176,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                     if (response.length() < TWEET_COUNT) {
                         Log.i("SAMY", "setting startOfOldTweets to true ");
                         startOfOldTweets = true;
-                        //tweets.addAll(SQLite.select().from(Tweet.class).orderBy(Tweet_Table.createdAt, false).queryList());
-                        //tweetAdapter.notifyDataSetChanged();
-                        //endOfOldTweets = true;
                     }
 
                     try {
                         List<Tweet> newTweets = Tweet.fromJSONArray(response);
                         Log.i("SAMY", "setting all tweets initial" + String.valueOf(newTweets.size()));
+                        if(newTweets.size() > 0) noNewTweets = false;
+
                         if(refreshing) {
                             tweets.addAll(0,newTweets);
                             tweetAdapter.notifyDataSetChanged();
@@ -194,6 +194,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    Log.i("SAMY-eof-endOfOldTweets",String.valueOf(endOfOldTweets));
+                    Log.i("SAMY-eof-noNewTweets",String.valueOf(noNewTweets));
                 }
 
                 @Override
@@ -217,20 +219,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                     throwable.printStackTrace();
                 }
             });
-        } else if (!endOfOldTweets || !isOnline) {
-            long storedSinceIDNew = SQLite.select(Tweet_Table.uid).from(Tweet.class).orderBy(Tweet_Table.createdAt, false).limit(1).querySingle().getUid();
-            if(storedSinceID == storedSinceIDNew) {
-
-            }
+        }
+        if (!endOfOldTweets || !isOnline || noNewTweets) {
             Log.i("SAMY", "old tweets " + String.valueOf(startOfOldTweets) + " page - " + String.valueOf(page));
             tweets.addAll(SQLite.select().from(Tweet.class).orderBy(Tweet_Table.createdAt, false).queryList());
             tweetAdapter.notifyDataSetChanged();
             endOfOldTweets = true;
         }
-        else if(endOfOldTweets){
+        if(endOfOldTweets){
             client.getHomeTimeline(0, storedMaxId,new JsonHttpResponseHandler() {
-                boolean cleared = false;
-
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Log.i("SAMY-", response.toString());

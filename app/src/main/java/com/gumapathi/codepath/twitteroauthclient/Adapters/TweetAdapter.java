@@ -2,6 +2,7 @@ package com.gumapathi.codepath.twitteroauthclient.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             viewHolder.tvTime.setText(String.valueOf(timeDiff)+suffix);
         }
         catch (ParseException e) {
+            Log.i("SAMY-dtParsEx ", e.getMessage());
             e.printStackTrace();
         }
         ImageView ivProfileImage = viewHolder.ivProfileImage;
@@ -117,11 +119,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 .load(thisTweet.getUser().getProfileImageURL())
                 .bitmapTransform(new RoundedCornersTransformation(mContext, 40, 0))
                 .into(ivProfileImage);
-        Glide.with(ivPhoto.getContext())
-                .load(thisTweet.getMediaUrl())
-                .bitmapTransform(new RoundedCornersTransformation(mContext, 15, 0))
-                .into(ivPhoto);
-
+        String url = thisTweet.getMediaUrl();
+        //Log.i("SAMY-tryset media url ", "why not " + url + "--");
+        if(!url.isEmpty()) {
+            Glide.with(ivPhoto.getContext())
+                    .load(thisTweet.getMediaUrl())
+                    .bitmapTransform(new RoundedCornersTransformation(mContext, 15, 0))
+                    .into(ivPhoto);
+        }
+        else {
+            ivPhoto.setVisibility(View.GONE);
+        }
     }
 
     /*@Override

@@ -112,7 +112,7 @@ public class Tweet extends BaseModel{
         tweet.createdAt = json.getString("created_at");
         tweet.user = User.fromJSONWithDBSave(json.getJSONObject("user"));
         if(json.getJSONObject("entities").has("media")) {
-            tweet.mediaUrl = getMediaUrl(json.getJSONObject("entities").getJSONArray("media"));
+            tweet.mediaUrl = getMediaUrlFromjson(json.getJSONObject("entities").getJSONArray("media"));
         }
         else {
             tweet.mediaUrl = "";
@@ -140,8 +140,12 @@ public class Tweet extends BaseModel{
             tweet.createdAt = json.getString("created_at");
             tweet.user = User.fromJSONWithDBSave(json.getJSONObject("user"));
 
-            //.getJSONArray("media").length()
-
+            if(json.getJSONObject("entities").has("media")) {
+                tweet.mediaUrl = getMediaUrlFromjson(json.getJSONObject("entities").getJSONArray("media"));
+            }
+            else {
+                tweet.mediaUrl = "";
+            }
             if(json.has("retweet_count")) {
                 tweet.retweetCount = Integer.parseInt(json.getString("retweet_count"));
             }
@@ -166,7 +170,7 @@ public class Tweet extends BaseModel{
         return allTweets;
     }
 
-    public static String getMediaUrl(JSONArray jsonArray) {
+    public static String getMediaUrlFromjson(JSONArray jsonArray) {
 
         try {
             for (int i = 0; i < jsonArray.length(); i++) {

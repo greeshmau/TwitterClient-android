@@ -22,6 +22,7 @@
         android:id="@+id/tvUserName"
         android:textColor="#000000"
         android:textStyle="bold"
+        fontPath="fonts/roboto_medium.ttf"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage" />
@@ -31,12 +32,15 @@
         android:layout_height="wrap_content"
         tools:text="My Tweet"
         android:id="@+id/tvBody"
+        android:lines="3"
+        android:maxLines="3"
         fontPath="fonts/roboto_light.ttf"
         android:autoLink="all"
         android:textColor="#000000"
         android:textColorLink="@color/colorPrimary"
         android:linksClickable="true"
-        android:layout_toRightOf="@+id/ivProfileImage"
+        android:paddingRight="3dp"
+        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_below="@id/tvUserName"/>
 
@@ -45,6 +49,7 @@
         android:layout_height="wrap_content"
         tools:text="1d"
         android:textColor="#AAB8C2"
+        fontPath="fonts/roboto_light.ttf"
         android:id="@+id/tvTime"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -53,8 +58,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="screenname"
+        android:text="@string/screenname"
         android:id="@+id/tvScreenName"
+        fontPath="fonts/roboto_light.ttf"
         android:textColor="#AAB8C2"
         android:layout_alignTop="@+id/tvUserName"
         android:layout_toRightOf="@+id/tvUserName"
@@ -65,9 +71,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivPhoto"
-        android:paddingTop="5dp"
+        android:paddingTop="10dp"
+        android:scaleType="fitCenter"
+        android:layout_alignParentEnd="true"
+        android:adjustViewBounds="true"
         android:layout_below="@+id/tvBody"
-        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage"
         tools:src="@drawable/twitter_icon"/>
 
     <LinearLayout
@@ -103,6 +112,7 @@
         <ImageButton
             android:layout_width="18dp"
             android:layout_height="18dp"
+            android:background="@android:color/transparent"
             android:id="@+id/ivLike"
             android:layout_weight=".12"
             android:src="@drawable/like_off"/>
