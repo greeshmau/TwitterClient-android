@@ -7,7 +7,8 @@
     <string name="intent_host">cprest</string>
     <string name="compose_label">Compose Tweet</string>
     <string name="label_postTweet">Tweet</string>
-    <string name="typeHereLabel">type here to tweet...</string>
+    <string name="typeHereLabel">What\'s happening?</string>
     <string name="maxChars">140</string>
+    <string name="profilepic_label">Profile Picture</string>
 
 </resources>

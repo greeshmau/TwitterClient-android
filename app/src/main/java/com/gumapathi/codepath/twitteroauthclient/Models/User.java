@@ -64,17 +64,6 @@ public class User extends BaseModel{
         this.profileImageURL = profileImageURL;
     }
 
-    public static User fromJSON(JSONObject json) throws JSONException {
-        User user = new User();
-
-        user.name = json.getString("name");
-        user.uid = json.getLong("id");
-        user.screenName = json.getString("screen_name");
-        user.profileImageURL = json.getString("profile_image_url");
-
-        return user;
-    }
-
     public static User fromJSONWithDBSave(JSONObject json) throws JSONException {
         User user = new User();
 

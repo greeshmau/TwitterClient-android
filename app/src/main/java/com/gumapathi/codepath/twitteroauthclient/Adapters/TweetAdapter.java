@@ -5,22 +5,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.gumapathi.codepath.twitteroauthclient.Decorators.LinkifiedTextView;
 import com.gumapathi.codepath.twitteroauthclient.Models.Tweet;
 import com.gumapathi.codepath.twitteroauthclient.R;
-import com.raizlabs.android.dbflow.annotation.Database;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by gumapathi on 9/26/2017.
@@ -28,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
     List<Tweet> allTweets;
+    private Context mContext;
 
     public TweetAdapter(List<Tweet> allTweets) {
         this.allTweets = allTweets;
@@ -41,6 +45,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     @Override
     public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        mContext = context;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(com.gumapathi.codepath.twitteroauthclient.R.layout.item_tweet, parent, false);
@@ -53,7 +58,26 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         Tweet thisTweet = allTweets.get(position);
 
         viewHolder.tvUsername.setText(thisTweet.getUser().getName());
+        viewHolder.tvScreenName.setText("@" + thisTweet.getUser().getScreenName());
         viewHolder.tvBody.setText(thisTweet.getBody());
+        viewHolder.tvRetweetCount.setText("");
+        viewHolder.tvLikeCount.setText("");
+
+        ImageView ivRetweet = viewHolder.ivRetweet;
+        ImageButton ivLike = viewHolder.ivLike;
+
+        if (thisTweet.getRetweetCount() > 0) {
+            ivRetweet.setImageResource(0);
+            viewHolder.tvRetweetCount.setText(String.valueOf(thisTweet.getRetweetCount()));
+            ivRetweet.setImageResource(R.drawable.retweet_off);
+        }
+        if (thisTweet.getFavouritesCount() > 0) {
+            ivLike.setImageResource(0);
+            viewHolder.tvLikeCount.setText(String.valueOf(thisTweet.getFavouritesCount()));
+            ivLike.setImageResource(R.drawable.like_off);
+
+        }
+
         try {
 
             DateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -64,18 +88,39 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             String outputText = outputFormat.format(twDate);
 
             Date newDate = new Date();
-            long timeDiff = getDateDiff(twDate, newDate, TimeUnit.MINUTES);
+            long timeDiff = 0;
+            String suffix = "m";
+            timeDiff = getDateDiff(twDate, newDate, TimeUnit.MINUTES);
+            boolean hour = false;
+            if(timeDiff > 60) {
+                timeDiff = getDateDiff(twDate, newDate, TimeUnit.HOURS);
+                suffix = "h";
+                hour = true;
+            }
+            if(timeDiff > 24 && hour) {
+                timeDiff = getDateDiff(twDate, newDate, TimeUnit.DAYS);
+                suffix = "d";
+            }
 
-            viewHolder.tvTime.setText(String.valueOf(timeDiff)+"m ago");
+            viewHolder.tvTime.setText(String.valueOf(timeDiff)+suffix);
         }
         catch (ParseException e) {
             e.printStackTrace();
         }
         ImageView ivProfileImage = viewHolder.ivProfileImage;
+        ImageView ivPhoto = viewHolder.ivPhoto;
+
+        ivProfileImage.setImageResource(android.R.color.transparent);
+        ivPhoto.setImageResource(android.R.color.transparent);
 
         Glide.with(ivProfileImage.getContext())
                 .load(thisTweet.getUser().getProfileImageURL())
+                .bitmapTransform(new RoundedCornersTransformation(mContext, 40, 0))
                 .into(ivProfileImage);
+        Glide.with(ivPhoto.getContext())
+                .load(thisTweet.getMediaUrl())
+                .bitmapTransform(new RoundedCornersTransformation(mContext, 15, 0))
+                .into(ivPhoto);
 
     }
 
@@ -107,17 +152,40 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     }
 
     public class TweetViewHolder extends RecyclerView.ViewHolder {
-        public ImageView ivProfileImage;
         public TextView tvUsername;
-        public TextView tvBody;
         public TextView tvTime;
+        public TextView tvScreenName;
+        public TextView tvLikeCount;
+        public TextView tvRetweetCount;
+
+        public LinkifiedTextView tvBody;
+
+        public ImageView ivProfileImage;
+        public ImageView ivPhoto;
+        public ImageButton ivLike;
+        public ImageView ivRetweet;
 
         public TweetViewHolder(View view) {
             super(view);
             ivProfileImage = (ImageView)view.findViewById((com.gumapathi.codepath.twitteroauthclient.R.id.ivProfileImage));
-            tvUsername = (TextView) view.findViewById((com.gumapathi.codepath.twitteroauthclient.R.id.tvUserName));
-            tvBody = (TextView) view.findViewById(com.gumapathi.codepath.twitteroauthclient.R.id.tvBody);
+            tvUsername = (TextView) view.findViewById(com.gumapathi.codepath.twitteroauthclient.R.id.tvUserName);
+            tvBody = (LinkifiedTextView) view.findViewById(com.gumapathi.codepath.twitteroauthclient.R.id.tvBody);
             tvTime = (TextView) view.findViewById(R.id.tvTime);
+            tvScreenName = (TextView) view.findViewById(R.id.tvScreenName);
+            tvLikeCount = (TextView) view.findViewById(R.id.tvLikeCount);
+            tvRetweetCount = (TextView) view.findViewById(R.id.tvRetweetCount);
+            ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
+            ivRetweet = (ImageView) view.findViewById(R.id.ivRetweet);
+            ivLike = (ImageButton) view.findViewById(R.id.ivLike);
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ivLike.setImageResource(R.drawable.like_on);
+
+                    Toast.makeText(v.getContext(), "Favorited the tweet", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 }

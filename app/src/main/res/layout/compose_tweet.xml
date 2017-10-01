@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="10dp"
         tools:context="com.gumapathi.codepath.twitteroauthclient.Activities.PostTweetActivity">
 
         <EditText
@@ -16,27 +18,29 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             tools:text="tweet tweet tweet tweet tweet tweet "
-            android:lines="4"
+            android:lines="10"
             android:maxLength="140"
+            android:textCursorDrawable="@drawable/cursor_drawable"
             android:hint="@string/typeHereLabel"
-            android:layout_toStartOf="@+id/btnPostTweet"
-            android:layout_alignBottom="@+id/btnPostTweet" />
+            android:layout_alignParentEnd="true"/>
 
         <Button
             android:id="@+id/btnPostTweet"
+            android:layout_below="@+id/etTweet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:textAllCaps="false"
             android:text="@string/label_postTweet"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
             android:onClick="postTweet"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/btnPostTweet"
+            android:layout_alignBottom="@+id/btnPostTweet"
             android:id="@+id/tvCharCount"
-            android:layout_alignParentRight="true"
-            android:text="@string/maxChars"
-            tools:text="12"
-            android:layout_below="@+id/btnPostTweet"/>
+            android:text="@string/maxChars" />
     </RelativeLayout>
 </LinearLayout>

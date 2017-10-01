@@ -1,44 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp">
 
     <ImageView
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:id="@+id/ivProfileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ic_launcher" />
+        android:src="@drawable/twitter_icon"
+        android:paddingRight="5dp"
+        android:contentDescription="@string/profilepic_label" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="MyName"
         android:id="@+id/tvUserName"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage" />
+
+    <com.gumapathi.codepath.twitteroauthclient.Decorators.LinkifiedTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        tools:text="UserName" />
-
-    <TextView
+        tools:text="My Tweet"
         android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserName"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:lines="4"
-        android:maxLines="4"
+        fontPath="fonts/roboto_light.ttf"
         android:autoLink="all"
+        android:textColor="#000000"
+        android:textColorLink="@color/colorPrimary"
         android:linksClickable="true"
-        tools:text="Lomo cold-pressed http://www.google.com vice biodiesel coloring book, skateboard readymade woke literally blue bottle. Lyft marfa godard, dreamcatcher you probably haven't heard of them helvetica try-hard distillery twee franzen. Enamel pin adaptogen tofu quinoa live-edge hella. Unicorn shaman fashion axe, banjo brooklyn polaroid neutra direct trade lumbersexual cray fanny pack hashtag migas schlitz." />
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_below="@id/tvUserName"/>
 
     <TextView
-        android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        tools:text="1d"
+        android:textColor="#AAB8C2"
+        android:id="@+id/tvTime"
         android:layout_alignParentTop="true"
-        tools:text="TimeSince" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="screenname"
+        android:id="@+id/tvScreenName"
+        android:textColor="#AAB8C2"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_toEndOf="@+id/tvUserName"
+        android:paddingLeft="5dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivPhoto"
+        android:paddingTop="5dp"
+        android:layout_below="@+id/tvBody"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        tools:src="@drawable/twitter_icon"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:id="@+id/llTweetHelpers"
+        android:layout_below="@+id/ivPhoto"
+        android:paddingTop="10dp"
+        android:paddingBottom="-5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/ivProfileImage">
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:id="@+id/ivReply"
+            android:layout_gravity="left"
+            android:src="@drawable/reply"
+            android:layout_weight=".33"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:id="@+id/ivRetweet"
+            android:src="@drawable/retweet_off"
+            android:layout_weight=".12"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/tvRetweetCount"
+            android:layout_weight=".21"/>
+        <ImageButton
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:id="@+id/ivLike"
+            android:layout_weight=".12"
+            android:src="@drawable/like_off"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/tvLikeCount"
+            android:layout_weight=".21"/>
+    </LinearLayout>
+
+    <!-- <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:padding="5dp"
+        android:background="#D3D3D3" /> -->
 </RelativeLayout>

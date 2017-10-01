@@ -5,9 +5,7 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,11 +29,20 @@ public class Tweet extends BaseModel{
     String body;
 
     @Column
-    @ForeignKey(saveForeignKeyModel = false)
+    @ForeignKey //(saveForeignKeyModel = false)
     User user;
 
     @Column
     String createdAt;
+
+    @Column
+    private int retweetCount = 0;
+    
+    @Column
+    private int favouritesCount = 0;
+
+    @Column
+    private String mediaUrl = "";
 
     public Tweet() {
     }
@@ -72,6 +79,31 @@ public class Tweet extends BaseModel{
         this.createdAt = createdAt;
     }
 
+    public int getFavouritesCount() {
+        return favouritesCount;
+    }
+
+    public void setFavouritesCount(int favouritesCount) {
+        this.favouritesCount = favouritesCount;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+
     public static Tweet fromJSON(JSONObject json) throws JSONException {
         Tweet tweet = new Tweet();
 
@@ -79,7 +111,20 @@ public class Tweet extends BaseModel{
         tweet.uid = json.getLong("id");
         tweet.createdAt = json.getString("created_at");
         tweet.user = User.fromJSONWithDBSave(json.getJSONObject("user"));
+        if(json.getJSONObject("entities").has("media")) {
+            tweet.mediaUrl = getMediaUrl(json.getJSONObject("entities").getJSONArray("media"));
+        }
+        else {
+            tweet.mediaUrl = "";
+        }
 
+        if(json.has("retweet_count")) {
+            tweet.retweetCount = Integer.parseInt(json.getString("retweet_count"));
+        }
+        if(json.has("favorite_count")) {
+            tweet.favouritesCount = Integer.parseInt(json.getString("favorite_count"));
+        }
+        
         tweet.save();
         return tweet;
     }
@@ -93,18 +138,57 @@ public class Tweet extends BaseModel{
             tweet.body = json.getString("text");
             tweet.uid = json.getLong("id");
             tweet.createdAt = json.getString("created_at");
-            tweet.user = User.fromJSON(json.getJSONObject("user"));
+            tweet.user = User.fromJSONWithDBSave(json.getJSONObject("user"));
+
+            //.getJSONArray("media").length()
+
+            if(json.has("retweet_count")) {
+                tweet.retweetCount = Integer.parseInt(json.getString("retweet_count"));
+            }
+            if(json.has("favorite_count")) {
+                tweet.favouritesCount = Integer.parseInt(json.getString("favorite_count"));
+            }
+            tweet.save();
             allTweets.add(tweet);
         }
 
-        FlowManager.getDatabase(TweetDatabase.class).executeTransaction(FastStoreModelTransaction
+        /*FlowManager.getDatabase(TweetDatabase.class).executeTransaction(FastStoreModelTransaction
                 .insertBuilder(FlowManager.getModelAdapter(Tweet.class))
                 .addAll(allTweets)
                 .build());
+         */
 
+        /*FlowManager.getDatabase(TweetDatabase.class).executeTransaction(FastStoreModelTransaction
+                .insertBuilder(FlowManager.getModelAdapter(Use.class))
+                .addAll(allTweets)
+                .build());
+*/
         return allTweets;
     }
+
+    public static String getMediaUrl(JSONArray jsonArray) {
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                if (jsonArray.getJSONObject(i).has("media_url")) {
+                    String mediaUrl = jsonArray.getJSONObject(i).get("media_url").toString();
+
+                    if (mediaUrl.equals("")) {
+                        continue;
+                    } else {
+                        return mediaUrl;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     /*
-    * Hi there, I am using FastStoreModelTransaction to store list of Tweets (getModelAdapter(Tweet.class)) as suggested here - https://agrosner.gitbooks.io/dbflow/content/StoringData.html. But this doesn't store the User object in the DB.
+    * Hi there, I am using FastStoreModelTransaction to store list of Tweets (getModelAdapter(Tweet.class)) as suggested here - https://agrosner.gitbooks.io/dbflow/content/StoringData.html. But this doesn't store the User object in the DB although User is a member of Tweet class.
+    * Is that how it should behave?
     */
 }
