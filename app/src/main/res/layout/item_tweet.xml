@@ -115,7 +115,7 @@
             android:background="@android:color/transparent"
             android:id="@+id/ivLike"
             android:layout_weight=".12"
-            android:src="@drawable/like_off"/>
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

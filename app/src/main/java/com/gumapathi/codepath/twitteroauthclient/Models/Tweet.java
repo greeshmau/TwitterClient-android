@@ -36,13 +36,16 @@ public class Tweet extends BaseModel{
     String createdAt;
 
     @Column
-    private int retweetCount = 0;
+    int retweetCount = 0;
     
     @Column
-    private int favouritesCount = 0;
+    int favouritesCount = 0;
 
     @Column
-    private String mediaUrl = "";
+    String mediaUrl = "";
+
+    @Column
+    boolean favorited = false;
 
     public Tweet() {
     }
@@ -103,6 +106,13 @@ public class Tweet extends BaseModel{
         this.mediaUrl = mediaUrl;
     }
 
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
 
     public static Tweet fromJSON(JSONObject json) throws JSONException {
         Tweet tweet = new Tweet();
@@ -117,7 +127,12 @@ public class Tweet extends BaseModel{
         else {
             tweet.mediaUrl = "";
         }
-
+        if(json.getBoolean("favorited")) {
+            tweet.favorited = true;
+        }
+        else{
+            tweet.favorited = false;
+        }
         if(json.has("retweet_count")) {
             tweet.retweetCount = Integer.parseInt(json.getString("retweet_count"));
         }

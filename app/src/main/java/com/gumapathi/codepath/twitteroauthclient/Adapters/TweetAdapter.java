@@ -15,6 +15,12 @@ import com.bumptech.glide.Glide;
 import com.gumapathi.codepath.twitteroauthclient.Decorators.LinkifiedTextView;
 import com.gumapathi.codepath.twitteroauthclient.Models.Tweet;
 import com.gumapathi.codepath.twitteroauthclient.R;
+import com.gumapathi.codepath.twitteroauthclient.TwitterApplication;
+import com.gumapathi.codepath.twitteroauthclient.TwitterClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -115,6 +122,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         ivProfileImage.setImageResource(android.R.color.transparent);
         ivPhoto.setImageResource(android.R.color.transparent);
 
+        if(thisTweet.isFavorited()) {
+            ivLike.setImageResource(R.drawable.like_on);
+        }
+        else {
+            ivLike.setImageResource(R.drawable.like_off);
+        }
+
         Glide.with(ivProfileImage.getContext())
                 .load(thisTweet.getUser().getProfileImageURL())
                 .bitmapTransform(new RoundedCornersTransformation(mContext, 40, 0))
@@ -189,8 +203,37 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ivLike.setImageResource(R.drawable.like_on);
+                    Tweet tweet = allTweets.get(getAdapterPosition());
+                    TwitterClient client = TwitterApplication.getRestClient();
+                    client.favoriteTweet(tweet.getUid(),new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Log.i("SAMY-", response.toString());
+                        }
 
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Log.i("SAMY-", responseString);
+                            throwable.printStackTrace();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                            Log.i("SAMY-", errorResponse.toString());
+                            throwable.printStackTrace();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.i("SAMY-", errorResponse.toString());
+                            throwable.printStackTrace();
+                        }
+                    });
+                    ivLike.setImageResource(R.drawable.like_on);
                     Toast.makeText(v.getContext(), "Favorited the tweet", Toast.LENGTH_LONG).show();
                 }
             });

@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -51,7 +50,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     ComposeTweetDialogFragment composeTweetDialogFragment;
     ImageView ivProfilePhoto;
     private TwitterClient client;
-    private TextView toolbar_title;
     private SwipeRefreshLayout swipeContainer;
     boolean noNewTweets = true;
 

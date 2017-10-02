@@ -46,14 +46,16 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 * [ ] List anything else that you can get done to improve the app functionality!
-     * [X] Added custom font Roboto 
-     * [X] User can favorite a tweet (App will send a fav POST request)
+     * [X] Created two fragments, one for timeline tweets and the other for favorite tweets. These are displayed via tabbed layout.
+     * [X] User can favorite a tweet (App will send a fav POST request). And using the Refresh Layout the newly favorited tweet can be seen in the favorite tweets fragment.
      * [X] Added Splash screen before the main screen loads
+     * [X] Added custom font Roboto 
+
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='./twitterDemo1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='./twitterDemo4.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

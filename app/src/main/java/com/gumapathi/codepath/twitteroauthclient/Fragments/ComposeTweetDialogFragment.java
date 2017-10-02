@@ -1,6 +1,5 @@
 package com.gumapathi.codepath.twitteroauthclient.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -28,8 +27,8 @@ import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.gumapathi.codepath.twitteroauthclient.Utils.Utils.checkForInternet;
 
 
 /**
@@ -99,63 +98,64 @@ public class ComposeTweetDialogFragment extends DialogFragment implements View.O
 
     private void postTweetToTwitter(String tweet) {
         final Bundle bundle = new Bundle();
-        final ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getActivity();
-
-        try {
-            client.postTweet(tweet, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    try {
-                        Tweet tweet = Tweet.fromJSON(response);
-                        Log.i("SAMY-succ1", response.toString());
-                        bundle.putParcelable("PostedTweet", Parcels.wrap(tweet));
-                        Log.i("SAMY", "parceling tweet " + tweet.getBody());
-                        Log.i("SAMY", "set resok" + String.valueOf(RESULT_OK));
-                        Log.i("SAMY", "going back");
-                        listener.onFinishComposeTweetDialog(bundle);
-                        dismiss();
-                    } catch (Exception e) {
-                        Log.i("SAMY-exec1", e.toString());
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    try {
-                        Log.i("SAMY-succ2", response.toString());
-                        dismiss();
-                    } catch (Exception e) {
-                        Log.i("SAMY-exec1", e.toString());
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.i("SAMY-err1", errorResponse.toString());
-                    throwable.printStackTrace();
-                    dismiss();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    Log.i("SAMY-err2", errorResponse.toString());
-                    throwable.printStackTrace();
-                    dismiss();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    Log.i("SAMY-err3", responseString);
-                    throwable.printStackTrace();
-                    dismiss();
-                }
-            });
+        final ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getTargetFragment();// getActivity();
+        if(!checkForInternet()) {
+            Toast.makeText(getContext(),"Offline, cannot post tweet",Toast.LENGTH_LONG).show();
         }
-        catch(Exception e) {
-            Log.i("SAMY-execmaster", e.toString());
-            e.printStackTrace();
+        else {
+            try {
+                client.postTweet(tweet, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            Tweet tweet = Tweet.fromJSON(response);
+                            Log.i("SAMY-succ1", response.toString());
+                            bundle.putParcelable("PostedTweet", Parcels.wrap(tweet));
+                            Log.i("SAMY", "parceling tweet " + tweet.getBody());
+                            Log.i("SAMY", "set resok" + String.valueOf(RESULT_OK));
+                            Log.i("SAMY", "going back");
+                            listener.onFinishComposeTweetDialog(bundle);
+                            dismiss();
+                        } catch (Exception e) {
+                            Log.i("SAMY-exec1", e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        try {
+                            Log.i("SAMY-succ2", response.toString());
+                            dismiss();
+                        } catch (Exception e) {
+                            Log.i("SAMY-exec1", e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        throwable.printStackTrace();
+
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        throwable.printStackTrace();
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        throwable.printStackTrace();
+                        dismiss();
+                    }
+                });
+            } catch (Exception e) {
+                Log.i("SAMY-execmaster", e.toString());
+                e.printStackTrace();
+            }
         }
     }
 
